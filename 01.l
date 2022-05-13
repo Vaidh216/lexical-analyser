@@ -1,4 +1,3 @@
-// ascyrax
 
 
 /* Definition Section */
