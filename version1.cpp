@@ -1,4 +1,3 @@
-#include<iostream>
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -7,7 +6,9 @@ int main(){
     char ch1[25],ch2[25],ch;
     ch1[24] = '\0';
     ch2[24] = '\0';
+    string word="";
     for(int i=0;i<24;i++){;
+
         ch1[i] = ' ';
     }
     for(int i=0;i<24;i++){
@@ -15,99 +16,150 @@ int main(){
     }
     
     ofstream fout;
-    //ifstream fin;
+    ifstream fin;
     fout.open("output.txt");
-    //fin.open("input.txt");
-    FILE *fin;
-    fin = fopen("input.txt","r");
-    int char_count=0,line_count=0,word_count=0,ind_first=0,ind_second=0;
+    fin.open("input.txt");
+    int char_count=0,line_count=0,word_count=0;
 
-    string word="";
+    //cout<<"here 4"<<endl;
 
-    while(fgets(ch2,24,fin) ){
-        word="";
-        for(int i=0;i<ind_first && ch1[i]!= '\0';i++){
-            if((ch1[i]<='Z' && ch1[i]>='A')||(ch1[i]<='z' && ch1[i]>='a')){
-                word+= ch1[i];
-                char_count++;
-            }else if(ch1[i] == ' ' && word!=""){
-                fout << word << "\n";
-                word_count++;
-                word="";
-            }else if(ch1[i] == '\n' && word!=""){
-                fout << word << "\n";
-                word_count++;
-                line_count++;
-                word="";
+    while(fin.get(ch)){
+        //cout<<ch;
+        //cout<<".";
+        if((ch<='z' && ch>='a') || (ch<='Z' && ch>='A') || ch==' ' || ch=='\n'){
+            if(f1 == 0){
+                ch1[cur] = ch;
+                cur++;
+                if(ch1[cur] == '\0'){
+                    f1=1;
+                    cur=0;
+                }
+            }else{
+                ch2[cur] = ch;
+                cur++;
+                if(ch2[cur] == '\0'){
+                    f2=1;        
+                }
+            }
+            if(f2 == 1){
+            word="";
+            // for(int i=0;i<24;i++){
+            //     cout<<ch1[i];
+            // }
+            // cout<<"\n";
+            // for(int i=0;i<24;i++){
+            //     cout<<ch2[i];
+            // }
+                for(int i=0;ch1[i]!='\0';i++){
+                    if(ch1[i] == ' '){
+                        word_count++;
+                        //cout<<word<<"\n";
+                        fout<<word<<"\n";
+                        word="";
+                    }else if(ch1[i] == '\n'){
+                        line_count++;
+                        word_count++;
+                        fout<<word<<"\n";
+                        word="";
+                    }else{
+                        word+=ch1[i];
+                        char_count++;
+                    }
+                }
+                for(int i=0;ch2[i]!='\0';i++){
+                    if(ch2[i] == ' '){
+                        word_count++;
+                        fout<<word<<"\n";
+                        word="";
+                    }else if(ch2[i] == '\n'){
+                        line_count++;
+                        word_count++;
+                        fout<<word<<"\n";
+                        word="";
+                    }else{
+                        word+=ch2[i];
+                        char_count++;
+                    }
+                }
+                f2=0;
+                f1=0;
+                cur=0;
+                if(word!=""){
+                    for(;cur<word.length();cur++){
+                        ch1[cur] = word[cur];
+                    }
+                }
             }
         }
-        for(int i=0;i<25 && ch2[i]!='\0';i++){
-            if((ch2[i]<='Z' && ch2[i]>='A')||(ch2[i]<='z' && ch2[i]>='a')){
-                word+= ch2[i];
-                char_count++;
-            }else if(ch2[i] == ' ' && word!=""){
-                fout << word << "\n";
-                word_count++;
-                word="";
-            }else if(ch2[i] == '\n' && word!=""){
-                fout << word << "\n";
-                word_count++;
-                line_count++;
-                word="";
-            }
-        }
-        for(int i=0;i<word.length();i++){
-            ch1[i] = word[i];
-        }
-        ind_first = word.length();
     }
-    word = "";
-    for(int i=0;i<ind_first && ch1[i]!= '\0';i++){
-            if((ch1[i]<='Z' && ch1[i]>='A')||(ch1[i]<='z' && ch1[i]>='a')){
-                word+= ch1[i];
-                char_count++;
-            }else if(ch1[i] == ' ' && word!=""){
-                fout << word << "\n";
-                word="";
+    word="";
+    //cout<<"here 5\n";
+    if(f1 == 0){
+        //cout<<"here 6\n";
+        for(int i=0;i<cur;i++){
+            if(ch1[i] == ' '){
                 word_count++;
-            }else if(ch1[i] == '\n' && word!=""){
-                fout << word << "\n";
-                word_count++;
+                //cout<<word<<"\n";
+                fout<<word<<"\n";
                 word="";
+            }else if(ch1[i] == '\n'){
                 line_count++;
+                word_count++;
+                fout<<word<<"\n";
+                word="";
+            }else{
+                word+=ch1[i];
+                char_count++;
             }
         }
         if(word != ""){
             fout<<word<<"\n";
             word_count++;
         }
-
-
+    }else{
+        //cout<<"here 7\n";
+        for(int i=0;ch1[i]!='\0';i++){
+            if(ch1[i] == ' '){
+                word_count++;
+                //cout<<word<<"\n";
+                fout<<word<<"\n";
+                word="";
+            }else if(ch1[i] == '\n'){
+                line_count++;
+                word_count++;
+                fout<<word<<"\n";
+                word="";
+            }else{
+                word+=ch1[i];
+                char_count++;
+            }
+        }
+        for(int i=0;i<cur;i++){
+            if(ch2[i] == ' '){
+                word_count++;
+                //cout<<word<<"\n";
+                fout<<word<<"\n";
+                word="";
+            }else if(ch2[i] == '\n'){
+                line_count++;
+                fout<<word<<"\n";
+                word="";
+            }else{
+                word+=ch2[i];
+                char_count++;
+            }
+        }
+        if(word!=""){
+            fout<<word<<"\n";
+            word_count++;
+        }
+    }
+    fin.close();
     fout.close();
-    fclose(fin);
-
-    cout<<"line count = "<<line_count+1<<"\n";
-    cout<<"Word count = "<<word_count<<"\n";
-    cout<<"Charater count = "<<char_count<<"\n";
-    cout<<"processing completed\n";
-
-
-    // int count = 500;
-    // char str[500];
-    // FILE *fp;
-    
-    // fp = fopen("input.txt","r");
-    // // fputs("An example file\n", fp);
-    // // fputs("Filename is file.txt\n", fp);
-    
-    // cout<<"here1\n";
-    
-    // while(fgets(str,count,fp)){
-    //     cout << str << endl;
-    // }
-    // cout<<"here2\n";
-    
-    // fclose(fp);
-    // return 0;
-
+    //cout<<"here 1"<<endl;
+    cout<<"\n line count = "<<line_count+1<<"\n";
+    cout<<"\n Word count = "<<word_count<<"\n";
+    cout<<"\n Charater count = "<<char_count<<"\n";
+    cout<<"\nprocessing completed\n";
+    cout<<endl;
 }
